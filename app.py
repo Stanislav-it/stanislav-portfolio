@@ -521,9 +521,8 @@ def send_lead_email(
 app = create_app()
 
 
-if __name__ == '__main__':
-    app.run(
-        host='0.0.0.0',
-        port=int(os.environ.get('PORT', '5050')),
-        debug=parse_bool(os.environ.get('FLASK_DEBUG', '1')),
-    )
+if __name__ == "__main__":
+    # Render/production must listen on $PORT. Locally it falls back to 5050.
+    port = int(os.environ.get("PORT", "5050"))
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug)
