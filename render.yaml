@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: stanislav-portfolio
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.2
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATA_DIR
+        value: /var/data
+      - key: DB_PATH
+        value: /var/data/app.db
+      - key: LEADS_DIR
+        value: /var/data/leads
+      - key: LEADS_JSONL_PATH
+        value: /var/data/leads.jsonl
+      - key: MAIL_ARCHIVE_DIR
+        value: /var/data/mail_archive
+      - key: CONTACT_EMAIL
+        value: stanislaussmotrych@gmail.com
+      - key: CONTACT_PHONE
+        value: +48723698910
+      - key: CONTACT_INSTAGRAM
+        value: @stanislavsmotrych
+      - key: CONTACT_INSTAGRAM_URL
+        value: https://www.instagram.com/stanislavsmotrych/
+      - key: CONTACT_WHATSAPP
+        value: +48723698910
+      - key: CONTACT_WHATSAPP_URL
+        value: https://wa.me/48723698910
+    disks:
+      - name: portfolio-data
+        mountPath: /var/data
+        sizeGB: 1

@@ -46,6 +46,25 @@ LEADS_JSONL_PATH=/var/data/leads.jsonl
 MAIL_ARCHIVE_DIR=/var/data/mail_archive
 ```
 
+## Render / Gunicorn
+
+This project is ready for Render with Gunicorn.
+
+Files added for deployment:
+
+- `requirements.txt` includes `gunicorn`
+- `Procfile` uses `web: gunicorn app:app`
+- `render.yaml` includes a ready-to-use Render service definition with a persistent disk mounted at `/var/data`
+
+If you deploy manually on Render, use:
+
+```
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn app:app
+```
+
+The local dev server also reads `PORT` now, so it can run both locally and on platforms that inject a port.
+
 ## Structure
 
 - `static/media/videos/` – hero and additional videos
