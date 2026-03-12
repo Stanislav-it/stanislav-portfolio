@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }} — Stanislav Smotrych</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="legal-body">
+  <main class="legal-shell">
+    <a class="legal-back" href="{{ url_for('index') }}">← Powrót</a>
+    <section class="legal-card">
+      <p class="legal-eyebrow">Informacje</p>
+      <h1>{{ page_title }}</h1>
+      <p class="legal-intro">{{ intro }}</p>
+
+      <div class="legal-sections">
+        {% for section in sections %}
+          <section class="legal-section">
+            <h2>{{ section.title }}</h2>
+            <ul>
+              {% for item in section.items %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

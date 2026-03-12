@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stanislav Smotrych — Portfolio</title>
+  <meta name="description" content="Portfolio web developera: strony dla firm, agencji, beauty i e-commerce.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="is-intro-active">
+  <div class="intro-screen" aria-hidden="true">
+    <div class="intro-screen__brand">
+      <span class="intro-screen__line">Stanislav</span>
+      <span class="intro-screen__line">Smotrych</span>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="brand-shell">
+      <a href="#hero" class="brand">Stanislav Smotrych</a>
+    </div>
+
+    <div class="header-right">
+      <nav class="desktop-nav" aria-label="Główna nawigacja">
+        <a href="#projekty">Projekty</a>
+        <a href="#o-mnie">O mnie</a>
+        <a href="#kontakt" data-contact-open>Kontakt</a>
+      </nav>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+    </div>
+  </header>
+
+  <div id="mobile-menu" class="mobile-menu" hidden>
+    <div class="mobile-menu__inner">
+      <div class="mobile-menu__topbar">
+        <div class="mobile-menu__brand">Stanislav Smotrych</div>
+        <button class="menu-close" type="button" aria-label="Zamknij menu">×</button>
+      </div>
+      <nav class="mobile-menu__nav" aria-label="Menu strony">
+        <a href="#projekty">Projekty</a>
+        <a href="#o-mnie">O mnie</a>
+        <a href="#kontakt" data-contact-open>Kontakt</a>
+      </nav>
+      <div class="mobile-menu__meta">
+        <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+        <a href="{{ contact.instagram_url }}" target="_blank" rel="noreferrer">{{ contact.instagram }}</a>
+        <a href="{{ contact.whatsapp_url }}" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a href="{{ url_for('privacy_policy') }}">Polityka prywatności</a>
+        <a href="{{ url_for('terms') }}">Regulamin</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact-drawer" class="contact-drawer" data-auto-open="{{ 'true' if contact_open else 'false' }}" hidden>
+    <div class="contact-drawer__backdrop" data-contact-close></div>
+    <aside class="contact-drawer__panel" aria-labelledby="contact-drawer-title" aria-modal="true" role="dialog">
+      <button class="contact-drawer__close" type="button" aria-label="Zamknij formularz" data-contact-close>×</button>
+      <div class="contact-drawer__header">
+        <p class="contact-drawer__eyebrow">Kontakt</p>
+        <h2 id="contact-drawer-title">Porozmawiajmy o projekcie.</h2>
+        <p class="contact-drawer__intro">Napisz krótko, czego potrzebujesz. Odpowiem z konkretem.</p>
+        <div class="contact-drawer__meta">
+          <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+          <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+          <a href="{{ contact.instagram_url }}" target="_blank" rel="noreferrer">{{ contact.instagram }}</a>
+          <a href="{{ contact.whatsapp_url }}" target="_blank" rel="noreferrer">WhatsApp</a>
+        </div>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack flash-stack--drawer">
+            {% for category, message in messages %}
+              <div class="flash flash--{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="{{ url_for('lead') }}" class="contact-form contact-form--drawer">
+        <label>
+          <span>Imię</span>
+          <input type="text" name="name" placeholder="Twoje imię" required>
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" placeholder="twoj@email.com" required>
+        </label>
+        <label>
+          <span>Firma / agencja</span>
+          <input type="text" name="company" placeholder="Nazwa firmy lub agencji">
+        </label>
+        <label>
+          <span>Wiadomość</span>
+          <textarea name="message" rows="5" placeholder="Opisz projekt" required></textarea>
+        </label>
+        <label class="contact-consent">
+          <input type="checkbox" name="privacy_accept" value="1" required>
+          <span>Akceptuję <a href="{{ url_for('privacy_policy') }}" target="_blank" rel="noreferrer">Politykę prywatności</a> i <a href="{{ url_for('terms') }}" target="_blank" rel="noreferrer">Regulamin</a>.</span>
+        </label>
+        <div class="contact-form__footer">
+          <p class="contact-form__legal">{{ contact.note }}</p>
+          <button type="submit" class="contact-submit">Wyślij wiadomość</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-shell">
+        <div class="hero-media reveal motion-frame">
+          <div class="hero-stage">
+            {% if hero_video %}
+              <video class="hero-cycle-video is-active" muted playsinline preload="metadata" autoplay loop>
+                <source src="{{ url_for('static', filename=hero_video) }}" type="video/mp4">
+              </video>
+            {% endif %}
+          </div>
+          <div class="hero-overlay"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hero-after" aria-labelledby="hero-title">
+      <div class="hero-after__layout reveal">
+        <div class="hero-after__copy">
+          <h1 id="hero-title" class="hero-statement" aria-label="Tworzę strony. Dla marek, sklepów i beauty. Szybko wdrożone i czytelne.">
+            <span class="hero-statement__line hero-statement__line--primary type-target" data-type-delay="22">Tworzę strony.</span>
+            <span class="hero-statement__line hero-statement__line--muted type-target" data-type-delay="17" data-type-start="520">Dla marek, sklepów i beauty.</span>
+            <span class="hero-statement__line hero-statement__line--muted type-target" data-type-delay="17" data-type-start="1260">Szybko wdrożone i czytelne.</span>
+          </h1>
+        </div>
+
+        <aside class="hero-after__aside" aria-label="Marki i platformy">
+          <div class="hero-logo-wall">
+            <div class="hero-logo-line">
+              <span class="hero-logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 17.5 9.6 12 13 15.4 20 8.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.8 8.5H20v5.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span>SEOmotive</span>
+            </div>
+            <div class="hero-logo-line">
+              <span class="hero-logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M6 5 18 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M18 5 6 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </span>
+              <span>Xestetik</span>
+            </div>
+            <div class="hero-logo-line">
+              <span class="hero-logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M20 12.2c0-.7-.1-1.3-.2-1.9H12v3.6h4.5c-.2 1.2-.9 2.2-1.9 2.8v2.3h3.1c1.8-1.6 2.8-4 2.8-6.8Z" fill="currentColor"/><path d="M12 20c2.5 0 4.6-.8 6.1-2.1l-3.1-2.3c-.9.6-1.9.9-3 .9-2.3 0-4.2-1.5-4.9-3.5H3.9v2.4A9.2 9.2 0 0 0 12 20Z" fill="currentColor"/><path d="M7.1 13c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.6H3.9A9.1 9.1 0 0 0 3 11c0 1.5.3 2.9.9 4.3L7.1 13Z" fill="currentColor"/><path d="M12 5.4c1.4 0 2.7.5 3.7 1.4l2.8-2.8A9.1 9.1 0 0 0 3.9 6.6L7.1 9C7.8 7 9.7 5.4 12 5.4Z" fill="currentColor"/></svg>
+              </span>
+              <span>Google</span>
+            </div>
+            <div class="hero-logo-line">
+              <span class="hero-logo-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 32" fill="none"><path d="M4 16C8 6 16 6 20 16C24 26 32 26 36 16C40 6 48 6 52 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16C8 26 16 26 20 16C24 6 32 6 36 16C40 26 48 26 52 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span>Meta</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    {% if showcase_stills %}
+      <section class="section showcase-section" aria-label="Materiały w ruchu">
+        <div class="showcase-scroll" data-showcase-root>
+          <div class="showcase-sticky">
+            <div class="showcase-scene">
+              <div class="showcase-glow" aria-hidden="true"></div>
+
+              <div class="showcase-grid">
+                <article class="showcase-tile showcase-tile--left-top">
+                  <img class="showcase-still" src="{{ url_for('static', filename=showcase_stills[1 if showcase_stills|length > 1 else 0]) }}" alt="Kadr projektu 1">
+                </article>
+
+                <article class="showcase-tile showcase-tile--center" data-showcase-target>
+                  <div class="showcase-tile__frame"></div>
+                </article>
+
+                <article class="showcase-tile showcase-tile--right-top">
+                  <img class="showcase-still" src="{{ url_for('static', filename=showcase_stills[2 if showcase_stills|length > 2 else 0]) }}" alt="Kadr projektu 2">
+                </article>
+
+                <article class="showcase-tile showcase-tile--left-bottom">
+                  <img class="showcase-still" src="{{ url_for('static', filename=showcase_stills[3 if showcase_stills|length > 3 else 0]) }}" alt="Kadr projektu 3">
+                </article>
+
+                <article class="showcase-tile showcase-tile--right-bottom">
+                  <img class="showcase-still" src="{{ url_for('static', filename=showcase_stills[4 if showcase_stills|length > 4 else (1 if showcase_stills|length > 1 else 0)]) }}" alt="Kadr projektu 4">
+                </article>
+              </div>
+
+              <div class="showcase-floating" data-showcase-floating>
+                <img class="showcase-still showcase-still--primary" data-showcase-primary src="{{ url_for('static', filename=showcase_stills[0]) }}" alt="Główny kadr projektu">
+              </div>
+
+              <div class="showcase-caption" data-showcase-copy>
+                <span>3+ lata doświadczenia</span>
+                <span>50+ zadowolonych klientów</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {% endif %}
+
+    <section id="projekty" class="section projects-section">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Projekty</span>
+        <h2>Wybrane realizacje pokazane szeroko i czytelnie.</h2>
+      </div>
+
+      <div class="projects-feed">
+        {% for project in projects %}
+          <article class="project-band reveal motion-frame">
+            {% if project.featured %}
+              <div class="project-hero-shot">
+                <img class="live-media" src="{{ url_for('static', filename=project.featured) }}" alt="{{ project.title }}">
+              </div>
+            {% endif %}
+
+            {% if project.gallery %}
+              <div class="project-ribbon">
+                {% for image in project.gallery %}
+                  <figure class="project-ribbon-shot">
+                    <img class="live-media" src="{{ url_for('static', filename=image) }}" alt="{{ project.title }} {{ loop.index }}">
+                  </figure>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if project.videos %}
+              <div class="project-videos">
+                {% for video in project.videos %}
+                  <video class="live-media" autoplay muted loop playsinline preload="metadata">
+                    <source src="{{ url_for('static', filename=video) }}" type="video/mp4">
+                  </video>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="o-mnie" class="section about-section">
+      <div class="section-heading reveal">
+        <span class="eyebrow">O mnie</span>
+        <h2>Development, wdrożenie i szybkie dowiezienie projektu.</h2>
+      </div>
+
+      <div class="about-layout">
+        <div class="about-copy reveal">
+          <h3>Stanislav Smotrych</h3>
+          <ul class="about-points">
+            {% for item in about_points %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+
+          <div class="about-links">
+            <a href="{{ links.xestetik }}" target="_blank" rel="noreferrer">X-Estetik</a>
+            <a href="{{ links.seomotive }}" target="_blank" rel="noreferrer">SEOmotive</a>
+            <a href="{{ links.google_partner }}" target="_blank" rel="noreferrer">Google Partner</a>
+          </div>
+        </div>
+
+        <div class="about-gallery reveal">
+          {% for image in about_images %}
+            <figure class="about-shot {% if loop.first %}about-shot--large{% endif %}">
+              <img class="live-media" src="{{ url_for('static', filename=image) }}" alt="Stanislav Smotrych">
+            </figure>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="contact-cta-section">
+      <div class="contact-cta reveal">
+        <div class="contact-cta__top">
+          <div class="contact-cta__copy">
+            <h2><span>Porozmawiajmy.</span> <span class="contact-cta__muted">Chętnie poznam Twój projekt.</span></h2>
+            <p>Strony WWW, wdrożenia, e-commerce i realizacje dla marek, beauty oraz agencji.</p>
+            <div class="contact-cta__meta">
+              <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+              <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+              <a href="{{ contact.instagram_url }}" target="_blank" rel="noreferrer">{{ contact.instagram }}</a>
+              <a href="{{ contact.whatsapp_url }}" target="_blank" rel="noreferrer">WhatsApp</a>
+            </div>
+            <button type="button" class="contact-cta__button" data-contact-open>Kontakt</button>
+          </div>
+        </div>
+
+        <div class="contact-cta__bottom">
+          <p>© {{ current_year }} Stanislav Smotrych</p>
+          <div class="contact-cta__links">
+            <a href="{{ url_for('privacy_policy') }}">Polityka prywatności</a>
+            <a href="{{ url_for('terms') }}">Regulamin</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
